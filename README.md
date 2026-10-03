@@ -2,19 +2,17 @@
 
 L'application Randopitons n'est plus maintenue. Sur les téléphones Android récents qui ne fonctionnent plus qu'en 64 bits, elle plante dès le lancement.
 
-Ce dépôt contient un script qui corrige ce plantage en modifiant une seule ligne de l'application. Il ne contient aucun fichier de l'application : il faut fournir soi-même le fichier `.xapk` de la version 2.1.5. Ce fichier est assez facilement trouvable en cherchant sur google "randopiton apk".
+## Installation sur le téléphone
+
+| ⚠️ N'installez jamais un fichier dont vous ne connaissez pas l'origine, y compris celui-ci. Utilisez un scanner de fichier comme [virus total](https://www.virustotal.com/gui/) avant de l'installer.
+
+Télécharger le fichier [randopiton_2.1.5_patch.xapk](https://github.com/Sarapuce/randopiton-patch/releases/tag/2.1.5-patch), puis installer ce fichier avec un installateur de fichier xpak (trouvable facilement sur le playstore).
 
 Testé sur un Pixel 9 sous Android 17 (API 37).
 
-| ⚠️ N'installez jamais un fichier dont vous ne connaissez pas l'origine, y compris celui-ci. Utilisez un scanner comme [virus total](https://www.virustotal.com/gui/) avant de l'installer.
+## Contenu
 
-## Le problème technique
-
-L'application se ferme immédiatement au démarrage sur les téléphones android récents.
-
-## Installation sur le téléphone
-
-Télécharger le fichier randopiton_2.1.5_patch.xapk, puis installer ce fichier avec un installateur de fichier xpak (trouvable facilement sur le playstore).
+Ce dépôt contient un script qui corrige ce crash en modifiant une seule ligne de l'application. Il ne contient aucun fichier de l'application : il faut fournir soi-même le fichier `.xapk` de la version 2.1.5. Ce fichier est assez facilement trouvable en cherchant sur google "randopiton apk".
 
 ## Utilisation
 
@@ -41,10 +39,6 @@ Les prérequis pour exécuter le script :
 - `adb`, pour installer l'application sur le téléphone
 
 Par défaut, le script utilise la version de build-tools la plus récente trouvée dans `$ANDROID_HOME` (ou `~/Android/Sdk`). On peut en imposer une avec la variable `BUILD_TOOLS`.
-
-## Avertissement
-
-Randopitons est la propriété de ses éditeurs. Ce dépôt ne redistribue aucun fichier de l'application, uniquement un script qui modifie une copie que vous possédez déjà, pour votre usage personnel.
 
 ## Cause technique
 
