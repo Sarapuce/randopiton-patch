@@ -1,0 +1,11 @@
+--- a/smali/com/facebook/soloader/SoLoader.smali
++++ b/smali/com/facebook/soloader/SoLoader.smali
+@@ -1401,7 +1401,7 @@
+ 
+     if-nez v2, :cond_0
+ 
+-    const-string v2, "/vendor/lib:/system/lib"
++    const-string v2, "/system/lib64:/vendor/lib64:/system/lib:/vendor/lib"
+ 
+     :cond_0
+     const-string v3, ":"

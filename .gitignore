@@ -1,0 +1,10 @@
+# Clés de signature : ne jamais les publier
+*.keystore
+*.jks
+
+# Fichiers de l'appli (non redistribuables) et APK générés
+*.xapk
+*.apk
+*.apks
+*.idsig
+out/
