@@ -22,6 +22,7 @@
 #      MAPS_API_KEY: same as --maps-key.
 set -euo pipefail
 
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 VERIFY=1
 MAPS_KEY=${MAPS_API_KEY:-}
 DEV_MAPS_KEY=AIzaSyBEWwVXOVJorjg9HrYZYJcew63EJ59cs2U
@@ -49,6 +50,8 @@ for tool in apktool zip unzip keytool "$BUILD_TOOLS/zipalign" "$BUILD_TOOLS/apks
 done
 if [ -n "$MAPS_KEY" ]; then
   command -v python3 >/dev/null || { echo "missing tool: python3 (needed for --maps-key)" >&2; exit 1; }
+  [ -f "$SCRIPT_DIR/replace_maps_key.py" ] \
+    || { echo "missing file: $SCRIPT_DIR/replace_maps_key.py (needed for --maps-key)" >&2; exit 1; }
   [ ${#MAPS_KEY} -eq ${#DEV_MAPS_KEY} ] \
     || { echo "error: the Maps key must be ${#DEV_MAPS_KEY} characters long (format 'AIza...')." >&2; exit 1; }
 fi
@@ -89,16 +92,7 @@ cp "$BASE" "$WORK/base.apk"
 # 2b. Optionally swap the Google Maps API key in the AndroidManifest.
 if [ -n "$MAPS_KEY" ]; then
   unzip -q -o "$WORK/base.apk" AndroidManifest.xml -d "$WORK/mf"
-  python3 - "$WORK/mf/AndroidManifest.xml" "$DEV_MAPS_KEY" "$MAPS_KEY" <<'PY'
-import sys
-path, old, new = sys.argv[1], sys.argv[2], sys.argv[3]
-data = open(path, 'rb').read()
-o, n = old.encode('utf-16-le'), new.encode('utf-16-le')
-if data.count(o) != 1:
-    sys.stderr.write("error: original Google Maps key not found in the manifest.\n")
-    sys.exit(1)
-open(path, 'wb').write(data.replace(o, n))
-PY
+  python3 "$SCRIPT_DIR/replace_maps_key.py" "$WORK/mf/AndroidManifest.xml" "$DEV_MAPS_KEY" "$MAPS_KEY"
   (cd "$WORK/mf" && zip -q "$WORK/base.apk" AndroidManifest.xml)
 fi
 
@@ -110,7 +104,6 @@ fi
 echo "[3/3] Aligning and signing APKs"
 mkdir -p "$WORK/signed"
 for apk in "$WORK/base.apk" "$WORK"/xapk/config.*.apk; do
-  # The base APK is named "com.huguesn.randopitons.apk" inside the .xapk.
   case "$apk" in
     */base.apk) name=com.huguesn.randopitons.apk ;;
     *)          name=$(basename "$apk") ;;
